@@ -12,9 +12,10 @@ class WeatherRepository {
     print("getCurrentWeather called");
     try {
       const cityName = "London";
-      final weatherData = weatherDataProvider.getCurrentWeather(cityName);
+      final weatherData = await weatherDataProvider.getCurrentWeather(cityName);
 
       final data = jsonDecode(weatherData as String);
+      // print("xxxx : ${WeatherModel.fromJson(data).city!.name}");
 
       if (data['cod'] != '200') {
         throw 'An unexpected error occurred';
@@ -22,6 +23,7 @@ class WeatherRepository {
 
       return WeatherModel.fromJson(data);
     } catch (e) {
+      print("xxxx : ${e.toString()}}");
       throw e.toString();
     }
   }

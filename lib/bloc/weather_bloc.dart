@@ -12,6 +12,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     // on<WeatherEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
+
     on<WeatherFetched>(_getCurrentWeather);
   }
   void _getCurrentWeather(
@@ -21,6 +22,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     emit(WeatherLoading());
     try {
       final weather = await weatherRepository.getCurrentWeather();
+      // print("BLOc ${weather.city!.name}");
       emit(WeatherSuccess(weatherModel: weather));
     } catch (e) {
       emit(WeatherFailure(e.toString()));

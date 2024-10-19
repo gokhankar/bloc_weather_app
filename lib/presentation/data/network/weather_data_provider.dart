@@ -16,7 +16,7 @@ class WeatherDataProvider {
       if (kDebugMode) {
         print("Weather data provider :  ${res.body}");
       }
-      print(res.body.toString());
+      // print(res.body.toString());
 
       return res.body;
     } catch (e) {

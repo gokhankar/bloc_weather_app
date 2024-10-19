@@ -1,14 +1,8 @@
-import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_app/bloc/weather_bloc.dart';
-import 'package:weather_app/main.dart';
 import 'package:weather_app/presentation/widgets/additional_info_item.dart';
-import 'package:weather_app/presentation/widgets/hourly_forecast_item.dart';
-import 'package:http/http.dart' as http;
-import 'package:weather_app/secrets.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -73,28 +67,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
       body: BlocBuilder<WeatherBloc, WeatherState>(
         // future: weather,
         builder: (context, state) {
-          final currentTemp = "";
-          final currentSky = "";
-          final currentPressure = "";
-          final currentWindSpeed = "";
-          final currentHumidity = "";
+          var currentCity = "";
+          var currentTemp = "";
+          var currentSky = "";
+          var currentPressure = "";
+          var currentWindSpeed = "";
+          var currentHumidity = "";
           if (state is WeatherFailure) {
             Center(
               child: Text(state.error),
             );
           }
-          if (state is! WeatherSuccess) {
+          if (state is WeatherLoading) {
             const Center(
               child: CircularProgressIndicator.adaptive(),
             );
-          } else {
+          }
+          if (state is WeatherSuccess) {
             final data = state.weatherModel;
-
-            final currentTemp = data.list![0].main!.temp;
-            final currentSky = data.list![0].weather![0].main;
-            final currentPressure = data.list![0].main!.pressure;
-            final currentWindSpeed = data.list![0].wind!.speed;
-            final currentHumidity = data.list![0].main!.humidity;
+            currentCity = data.city!.name.toString();
+            currentTemp = data.list![0].main!.temp.toString();
+            currentSky = data.list![0].weather![0].main.toString();
+            currentPressure = data.list![0].main!.pressure.toString();
+            currentWindSpeed = data.list![0].wind!.speed.toString();
+            currentHumidity = data.list![0].main!.humidity.toString();
           }
           // if (snapshot.connectionState == ConnectionState.waiting) {
           //   return const Center(
@@ -142,6 +138,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
+                              Text(
+                                '$currentCity ',
+                                style: const TextStyle(
+                                  fontSize: 42,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               Text(
                                 '$currentTemp K',
                                 style: const TextStyle(
